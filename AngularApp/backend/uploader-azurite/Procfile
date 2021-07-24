@@ -1,2 +1,2 @@
-web: npx azurite-blob 0.0.0.0:
+web: npx azurite-blob 0.0.0.0:\$PORT
 

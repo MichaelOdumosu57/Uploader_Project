@@ -1,0 +1,276 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "AngularApp": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss",
+                    "skipTests": true
+                },
+                "@schematics/angular:directive": {
+                    "skipTests": true
+                },
+                "@schematics/angular:service": {
+                    "skipTests": true
+                }
+            },
+            "root": "",
+            "sourceRoot": "src",
+            "prefix": "app",
+            "architect": {
+                "judima": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+
+                        "outputPath":"../docs",
+                        "fileReplacements": [
+                            {
+                                "replace": "src/app/website.ts",
+                                "with": "src/app/cms/website-judima-dev.ts"
+                            },
+                            {
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.judima.dev.ts"
+                            }
+                        ],
+                        "index": "src/index.html",
+                        "main": "src/main.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "aot": true,
+                        "assets": [
+                            "src/assets"
+                        ],
+                        "styles": [
+                            "src/styles.scss"
+                        ],
+                        "scripts": [
+                            "backend/modernizr/modernizr.js",
+                            "backend/polyfills/object.js",
+                            // "backend/polyfills/signaturePad.js",
+                            "backend/polyfills/parseXml.js",
+                            "src/assets/scripts/pikaday.js",
+                            "src/assets/scripts/vanillaTilt.js"
+                        ],
+                        "optimization": false,
+                        "sourceMap": true,
+                        "poll": 2500,
+                        "verbose": false,
+                        "watch": false
+                    },
+                    "configurations": {
+                        "codesandboxprod": {
+                            "outputPath":"./dist/codesandbox",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/app/website.ts",
+                                    "with": "src/app/cms/website-uploader-dev.ts"
+                                },
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.uploader.prod.ts"
+                                }
+                            ],
+                            "assets": [
+                                "src/assets"
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "github": {
+                            "outputPath":"../docs",
+                            "baseHref":"/Uploader_Project/",
+                            "deployUrl":"/Uploader_Project/",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/app/website.ts",
+                                    "with": "src/app/cms/website-uploader-dev.ts"
+                                },
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.uploader.prod.ts"
+                                }
+                            ],
+                            "assets": [
+                                "src/assets"
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": true,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "psuedoprod": {
+                            "outputPath":"./dist/psuedo",
+
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/app/website.ts",
+                                    "with": "src/app/cms/website-uploader-dev.ts"
+                                },
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.uploader.prod.ts"
+                                }
+                            ],
+                            "assets": [
+                                "src/assets"
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": true,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        },
+                        "uploader": {
+
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/app/website.ts",
+                                    "with": "src/app/cms/website-uploader-dev.ts"
+                                },
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.uploader.dev.ts"
+                                },
+                                {
+                                    "replace": "src/app/app.module.ts",
+                                    "with": "src/app/app.module.dev.ts"
+                                },
+                                {
+                                    "replace": "src/app/customExports.ts",
+                                    "with": "src/app/customExports.dev.ts"
+                                }
+
+
+                            ]
+                        },
+                        "play": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/app/website.ts",
+                                    "with": "src/app/cms/website-play-dev.ts"
+                                },
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.judima.dev.ts"
+                                },
+                                {
+                                    "replace": "src/app/customExports.ts",
+                                    "with": "src/app/customExports.dev.ts"
+                                }
+                            ]
+                        }
+
+
+
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "AngularApp:judima:play",
+                        "port": 4520,
+                        "liveReload": true,
+						"hmr": false
+                    },
+                    "configurations": {
+                        "github": {
+                            "browserTarget": "AngularApp:judima:github"
+                        },
+                        "codesandboxprod": {
+                            "browserTarget": "AngularApp:judima:codesandboxprod"
+                        },
+                        "psuedoprod": {
+                            "browserTarget": "AngularApp:judima:psuedoprod"
+                        },
+                        "play": {
+                            "port": 4520,
+                            "browserTarget": "AngularApp:judima:play"
+                        },
+
+                        "uploader": {
+                            "disableHostCheck": true,
+                            // "liveReload": false,
+                            "port": 4521,
+                            "browserTarget": "AngularApp:judima:uploader"
+                        }
+
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "AngularApp:build"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "tsconfig.app.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "defaultProject": "AngularApp",
+    "cli": {
+        "analytics": false
+    }
+}

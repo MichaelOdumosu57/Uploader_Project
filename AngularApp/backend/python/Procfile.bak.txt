@@ -1,0 +1,5 @@
+worker: sudo iptables -t nat -A PREROUTING -p tcp --dport $PORT -j DNAT --to-destination http://l983x8o86z9jf4:ld797y6njwpbvnn8k1p86md4gnte6i@us-east-static-08.quotaguard.com:9293
+myworker: ssh -L 3005:uploader.database.windows.net:1433 http://l983x8o86z9jf4:ld797y6njwpbvnn8k1p86md4gnte6i@us-east-static-08.quotaguard.com -p 9293
+web: python tornado_heroku_server.py 0.0.0.0:\$PORT
+heroku ps:scale worker=1
+worker: ssh -L 3005:uploader.database.windows.net:1433 http://l983x8o86z9jf4:ld797y6njwpbvnn8k1p86md4gnte6i@us-east-static-08.quotaguard.com -p 9293

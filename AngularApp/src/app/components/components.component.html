@@ -1,0 +1,378 @@
+
+    <p-carousel
+
+    *ngIf="options.type === 'primeng-carousel'"
+    [value]="options.value"
+    [numVisible]="options.numVisible"
+    [circular]="options.circular"
+    [responsiveOptions]="options.responsiveOptions"
+    [orientation]="options.orientation"
+    [autoplayInterval]="options.autoplayInterval"
+    [contentClass]="options.contentClass"
+    [ngStyle]="options.style"
+    [styleClass] ="options.styleClass"
+
+
+    >
+        <ng-template
+        pTemplate ="header"
+        *ngIf="options.header"
+
+        >
+            <span class ="a_p_p_CarouselHeader">{{options.header.title}}</span>
+        </ng-template>
+        <ng-template  let-profile pTemplate="item">
+            <div class ="a_p_p_CarouselCard">
+                <img src= {{profile.src}}
+                width=100
+                class = "a_p_p_CarouselImg"
+                />
+                <h3 class ="a_p_p_CarouselProfileName">
+                {{profile.name}}
+                </h3>
+                <button pButton pRipple label="Add Friend" icon="pi pi-plus" class ="a_p_p_CarouselAddFriendButton"></button>
+            </div>
+        </ng-template>
+    </p-carousel>
+
+
+    <p-button
+    *ngIf="options.type === 'primeng-button'"
+    [label]="options.label"
+    [icon]="options.icon"
+    [styleClass]="options.styleClass"
+    [ngStyle]="options.style"></p-button>
+
+
+    <p-card
+    *ngIf="options.type === 'primeng-card'"
+    [header]="options.header"
+    [subheader]="options.subheader?.text || options.subheader"
+    [ngStyle]="options.style"
+    [styleClass]="'p-card-shadow ' + options.styleClass">
+        <ng-template pTemplate="header">
+            <img alt="Card"
+            [src]="options.img.src"
+            [ngStyle]="options.img.style"
+            [class]="options.img.class"
+            >
+        </ng-template>
+        <!-- <ng-template pTemplate="subtitle"
+        [class]="options.subheader?.class"
+        >
+
+        </ng-template> -->
+        <p
+        [ngStyle]="options.cardText?.style"
+        [class]="options.cardText?.class"
+        >{{options.cardText}}</p>
+        <ng-template pTemplate="footer">
+
+                <p-button
+                *ngFor='let button of options.buttons'
+                [label]="button.label"
+                [icon]="button.icon"
+                [styleClass]="button.styleClass"
+                [style]="button.style"></p-button>
+
+
+        </ng-template>
+    </p-card>
+
+    <p-dropdown
+    *ngIf="options.type === 'primeng-dropdown'"
+    [options]="options.options"
+    [optionLabel]="options.optionLabel"
+    [showClear]="options.showClear"
+    [placeholder]="options.placeHolder"
+    [ngStyle]="options.style"
+    [styleClass]="options.styleClass"
+    [ngStyle]="options.style"
+    [panelStyle]="options.panel?.style"
+    [panelStyleClass]="options.panel?.class"
+    (onChange)="dropDown.onChange($event)"
+    >
+        <ng-template pTemplate="selectedItem">
+        </ng-template>
+        <ng-template let-items pTemplate="item">
+            <div
+            [class]="items  ?.container?.class || options?.items?.container?.class"
+            [ngStyle]="items?.container?.style || options?.items?.container?.style"
+
+            >
+                <h2
+                [ngStyle]="items?.text?.style || options?.items?.text?.style"
+                >{{items.name}}</h2>
+            </div>
+        </ng-template>
+    </p-dropdown>
+
+
+    <div
+    *ngIf="options.type === 'profileCard'"
+    [class]="(options.class || '') + ' a_p_p_ProfileCard'"
+    [ngStyle]="options.style"
+    >
+
+            <img
+            *ngIf="['img',undefined].includes(options.pic?.type)"
+            alt=""
+            (error)="profileCard.defaultPic({})"
+            [src]="options.pic?.src"
+            [class]="options.pic?.class || 'a_p_p_ProfileCardPic'"
+            >
+            <div
+            *ngIf="options.pic?.type === 'icon'"
+            [class]="options.pic?.container?.class || 'a_p_p_ProfileCardPic'"
+            [ngStyle]="options.pic?.container?.style"
+            >
+                <i
+                [class]="options.pic?.class"
+                >
+                </i>
+            </div>
+
+
+
+        <p
+        [class]="options.name?.class || 'a_p_p_ProfileCardName'"
+        [ngStyle]="options.name?.style"
+        >
+            {{options?.name?.text}}
+        </p>
+        <p-button
+        *ngIf="options.addButton?.hide !=='true'"
+        [label]="options.addButton?.label"
+        [icon]="options.addButton?.icon"
+        [styleClass]="options.addButton?.styleClass || 'a_p_p_ProfileCardAdd'"
+        [style]="options.addButton?.style">
+        Add Friend
+        </p-button>
+        <p-button
+        *ngIf="options.removeButton?.hide !=='true'"
+        [label]="options.removeButton?.label"
+        [icon]="options.removeButton?.icon"
+        [styleClass]="'p-button-secondary '+ (options.removeButton?.styleClass || 'a_p_p_ProfileCardRemove')"
+        [style]="options.removeButton?.style">
+        Remove
+        </p-button>
+
+    </div>
+
+
+    <p-progressSpinner
+    *ngIf="options.type === 'primeng-progressSpinner'"
+    [ngStyle]="options.style"
+    [styleClass]="options.styleClass"
+    [strokeWidth]="options.strokeWidth"
+    [fill]="options.fill"
+    [animationDuration]="options.animationDuration">
+
+    </p-progressSpinner>
+
+    <p-table
+    #pTable
+    *ngIf="options.type === 'primeng-table'"
+    [value]="options.value || primengTable.value"
+    [totalRecords]="(options.value || primengTable.value).length"
+    [class]="(options.class || '') + ' a_p_p_Table'"
+    [ngStyle]="options.style"
+    [paginator]="true"
+    [rowHover]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10,25,50]"
+    pageLinkSize="3"
+    currentPageReportTemplate="Showing {first} to {last} of {options.value.length} entries"
+    >
+        <ng-template pTemplate="caption">
+
+            <button
+            *ngFor="let button of options?.search?.buttons"
+            [class]="button.class || 'a_p_p_TableSearchButton'"
+            (click)="primengTable.filterBy($event)"
+            >
+                {{button.name}}
+            </button>
+            <i
+            [class]="(options.search?.icon?.class || '') +' pi pi-search'"
+            [ngStyle]="options.search?.icon?.style"
+            >
+            </i>
+            <input
+            pInputText
+            type="text"
+            (blur)="primengTable.filterValue($event)"
+            [class]="options?.search?.query?.class || 'a_p_p_TableSearchQuery'"
+            placeholder="Global Search" />
+            <button
+            [class]="'a_p_p_TableSearchSubmitButton'"
+            (click)="primengTable.filterSubmit($event)"
+            >
+                Search
+            </button>
+            <button
+            [class]="'a_p_p_TableSearchResetButton'"
+            (click)="primengTable.filterReset($event)"
+            >
+                Reset
+            </button>
+
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th [pSortableColumn]="col.header" *ngFor="let col of options.cols">
+                    {{col.header}}
+                    <i
+                    [class]="'pi pi-sort'"
+                    >
+                    </i>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item >
+            <tr
+            [class]="' a_p_p_TableRow'"
+            >
+
+                <ng-container
+                *ngFor="let col of options.cols;index as i"
+                [ngSwitch]="col.header"
+                >
+                    <td
+                    *ngSwitchCase="'Comments'"
+                    class="a_p_p_TableRowTextArea"
+                    (click)="primengTable.textExpander($event,item[col.header])"
+                    >
+                        <div
+                        class="a_p_p_TableRowTextAreaContainer"
+                        >
+                            <td
+                            [class]="(item.class || '') + ' a_p_p_TableRowComment'"
+                            [ngStyle]="item.style"
+                            >
+                                {{item[col.header]}}
+                            </td>
+                        </div>
+                    </td>
+                    <td
+                    *ngSwitchCase="'Merchant Address'"
+                    class="a_p_p_TableRowTextArea"
+                    (click)="primengTable.textExpander($event,item[col.header])"
+                    >
+                        <div
+                        class="a_p_p_TableRowTextAreaContainer"
+                        >
+                            <td
+                            [class]="(item.class || '') + ' a_p_p_TableRowComment'"
+                            [ngStyle]="item.style"
+                            >
+                                {{item[col.header]}}
+                            </td>
+                        </div>
+                    </td>
+                    <img
+                    *ngSwitchCase="'Photo'"
+                    (click)="primengTable.photoExpander($event,item[col.header])"
+                    [src]="item[col.header]"
+                    alt=""
+                    [class]="'a_p_p_TableRowPhotoEntry'"
+                    >
+                    <td
+                    *ngSwitchDefault
+                    [class]="(item.class || '') + ' a_p_p_TableRowEntry'"
+                    [ngStyle]="item.style"
+                    >
+
+                        {{item[col.header]}}
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+    </p-table>
+
+
+
+
+
+    <!-- dev additions -->
+    <button
+    *ngIf="options?.type ==='fb-login'"
+    [class]="options?.class + ' a_p_p_LoginFacebookButton'"
+    >
+    <img
+    src="assets/media/fb_logo.png"
+    height="50" width="50"
+    class=a_p_p_LoginFacebookImage
+    >
+        <p
+        class=a_p_p_LoginFacebookText
+        >Continue With Facebook</p>
+    </button>
+
+    <div
+    *ngIf="options?.type ==='scanConfirm'"
+    [class]="(options?.class ||'') + ' a_p_p_ScanResultsContainerFrame'"
+    >
+        <h1
+        [class]="options?.title?.class || ' a_p_p_ScanResultsConfirm'"
+        >
+            {{options?.title?.text || "Confirm Values"}}
+        </h1>
+
+        <ng-container
+        *ngFor="let field of options?.fields"
+        >
+            <h2
+            [class]="field?.nameClass  || ' a_p_p_ScanResultsOption'"
+            [ngStyle]="field.nameStyle"
+            >{{field.name}}</h2>
+
+            <ng-container>
+                <textarea
+                *ngIf="field.inputType==='textarea' else fieldBlock0"
+                [class]="field.inputClass || ' a_p_p_ScanResultsTextArea'"
+                [ngStyle]="field.inputStyle"
+
+                [(ngModel)] = "field.value"
+                >
+                </textarea>
+                <ng-template
+                #fieldBlock0
+                >
+                    <input
+                    [class]="field.inputClass || ' a_p_p_ScanResultsInput'"
+                    [ngStyle]="field.inputStyle"
+
+                    [(ngModel)] = "field.value"
+                    />
+                </ng-template>
+
+            </ng-container>
+
+        </ng-container>
+        <canvas
+        *ngIf="options?.canvas"
+        [class]="options.canvas?.class || ' a_p_p_ScanResultsCanvas'"
+        [ngStyle]="options.canvas?.style"
+        ></canvas>
+        <button
+        [class]="options?.back?.class || 'a_p_p_ScanResultsBack'"
+        [style]="options?.back?.style"
+        (click)="options?.back?.click($event)"
+        >
+        {{options?.submit?.text || 'Back'}}
+        </button>
+        <button
+        [class]="options?.submit?.class || 'a_p_p_ScanResultsButton'"
+        [style]="options?.submit?.style"
+        (click)="options?.submit?.click($event)"
+        >
+        {{options?.submit?.text || 'Confirm'}}
+        </button>
+
+
+
+    </div>
+
+
+    <!--  -->

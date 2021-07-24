@@ -1,0 +1,4 @@
+[qgtunnel.mssql]
+accept = "localhost:1433"
+connect = "tcp://uploader.database.windows.net:1433"
+transparent = true

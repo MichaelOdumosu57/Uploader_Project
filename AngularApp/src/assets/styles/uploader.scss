@@ -1,0 +1,388 @@
+
+@mixin title {
+	font-size: 64px;
+	text-align: center;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+*:not(i) {
+	color:white;
+	font-family:Fjalla One;
+}
+
+
+
+.a_p_p_ {
+	&Container {
+		@include glassmorphism;
+		background-color: blue;
+		opacity:.3
+	}
+
+	&Title {
+		@include title;
+	}
+
+	&Input{
+		border-radius: 30px;
+		font-size: 20px;
+		padding: 0 0 0 30px ;
+	}
+
+	&Button{
+		@include blue_button;
+		font-size:30px
+}
+
+	&MainOverlay{
+		background-color: rgb(15, 28, 112);
+		width: 100%;
+		// height:1000px;
+	}
+
+	&SubTitle{
+		font-size: 32px;
+		text-align: center;
+	}
+
+	&Link{
+		font-size: 24px;
+	}
+
+
+	&FacebookLogin{
+		height:200px
+	}
+	&Login{
+
+		&Facebook{
+			&Button{
+				@include glassmorphism;
+				@include dark_blue_button;
+				color:white;
+				font-size:30px;
+				padding:10px 20px 0px 20px;
+				width:400px;
+				display: flex;
+				flex-direction: row;
+				text-align: center;
+
+				@media screen and (max-width: 560px) {
+					width: 90%;
+
+				}
+			}
+
+			&Text{
+				margin:5px 0px 0 20px;
+
+				@media screen and (max-width: 560px) {
+					text-align: center;
+					flex-grow: 1;
+				}
+
+				@media screen and (max-width: 400px) {
+					font-size: 24px;
+				}
+			}
+
+			&Image{
+				margin:0px 0px 10px 0px;
+			}
+
+
+		}
+
+		&Container{
+			background-color: white;
+			opacity:.8
+		}
+
+		&Title{
+			@include title;
+		}
+
+		&Input{
+
+			padding: 1em;
+			border: 1px solid hsla(0,0%,100%,.3);
+			border-radius: 500px;
+			backdrop-filter: blur(5px);
+			box-shadow: 4px 4px 60px rgba(0,0,0,.2);
+			color: #000;
+			font-family: Montserrat,sans-serif;
+			font-weight: 500;
+			text-shadow: 2px 2px 4px rgba(0,0,0,.2);
+			font-size: 17px;
+		}
+
+	}
+
+	&Scan{
+
+		&Results{
+
+			&Loading{
+				// @include outline;
+				@include flex-column-center;
+				justify-content: center;
+				@include glassmorphism;
+			}
+
+			&Container{
+				@include glassmorphism;
+
+				background-color: grey;
+				opacity:.9;
+				z-index:7 !important;
+
+
+				&Frame{
+					width: 100%;
+					height: 100%;
+					display:flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					align-content: flex-start;
+					justify-content: center;
+
+
+				}
+			}
+
+			&Confirm{
+				font-size: 64px;
+				text-align: center;
+				width:100%;
+				margin:40px 0 40px 0;
+			}
+
+			&Option{
+				font-size: 48px;
+				margin:0px 0 20px 0px;
+				width: 40%;
+				height:70px;
+
+
+				@media screen and (max-width: 960px) {
+					width: 90%;
+					text-align: center;
+				}
+			}
+
+			&Input{
+				@include glassmorphism;
+				width: 50%;
+				padding: 0 0px 0 50px;
+				margin:0px 0 20px 0px;
+				height:70px;
+				color:black;
+				font-size:40px;
+				@media screen and (max-width: 960px) {
+					width: 90%;
+				}
+			}
+
+			&TextArea{
+				@include glassmorphism;
+				width: 50%;
+				padding: 30px 50px 30px 50px;
+				margin:0px 0 20px 0px;
+				height:270px;
+				color:black;
+				font-size:40px;
+				@media screen and (max-width: 960px) {
+					width: 90%;
+				}
+			}
+
+			&Canvas{
+				height: 500px;
+				width:  650px;
+				margin: 0 500px 0 500px;
+			}
+
+			&Back{
+				@include black_button;
+				margin:30px 0 0 0;
+				flex-basis: 300px;
+				font-size:54px;
+			}
+
+			&Button{
+				@include blue_button;
+				margin:30px 0 0 0;
+				flex-basis: 300px;
+				font-size:54px;
+			}
+
+
+
+			// &Canvas{
+			// 	// @include outline;
+
+			// }
+		}
+
+		&Container{
+			opacity:1;
+			// @include outline;
+			background-color: white;
+			@include flex-column-center;
+
+		}
+
+		&Option{
+
+			&Name{
+				color:black;
+				margin-left: 20px;
+			}
+
+			&Container{
+
+				width: 90%;
+
+				&:nth-child(1){
+					margin-top:20px;
+				}
+			}
+
+			&LogOut{
+
+				@include blue_button;
+
+			}
+
+			&Icon{
+				color:black;
+			}
+		}
+
+		&Viewport{
+
+			@include glassmorphism;
+			// filter:contrast(100) sepia(.5) saturate(100) invert(1) blur(5px)
+		}
+
+		&Button{
+			@include glassmorphism;
+
+			&Submit{
+				@include glassmorphism;
+				@include black_button;
+			}
+
+			&Camera{
+				@include glassmorphism;
+				@include red_button;
+			}
+
+		}
+
+		&Title{
+			font-size: 48px;
+			text-align: center;
+		}
+	}
+
+	&Picture{
+
+		&Button{
+			&TakePhoto{
+				@include glassmorphism;
+				@include green_button;
+			}
+		}
+
+	}
+
+	&Dashboard{
+		&Table{
+			position: absolute !important;
+		}
+
+		&Expander{
+			&Overlay{
+				background-color:grey;
+				@include glassmorphism;
+				opacity: .7;
+				z-index:5 !important;
+			}
+
+			&Container{
+				background-color:white ;
+				@include glassmorphism;
+				z-index:6 !important;
+				opacity: .7;
+			}
+
+			&Image,&Icon,&Text{
+				z-index:7 !important;
+			}
+
+			&Icon{
+				font-size: 48px;
+				color:black;
+
+				@media (max-width: 1175px){
+					font-size:200px
+				}
+
+			}
+
+			&Text{
+				font-size: 48px;
+				text-align: center;
+			}
+		}
+
+		&SearchIcon{
+			margin:0 20px 0 0px;
+			align-self: center
+		}
+
+		&SearchButton{
+			@include glassmorphism;
+			@include blue_button;
+			font-size:30px;
+			padding: 15px;
+			margin:0 20px 0 0;
+		}
+
+		&SelectSearchButton{
+			@include glassmorphism;
+			@include orange_button;
+			font-size:30px;
+			padding: 15px;
+			margin:0 20px 0 0;
+		}
+	}
+}
+[class*="a_p_p_Login"]:not([class*="a_p_p_LoginFacebook"]){
+	color:grey
+}
+[class*="a_p_p_ScanResults"]:not([class*="a_p_p_ScanResultsCanvas"],[class*="a_p_p_ScanResultsContainer"]),
+.a_p_p_LoginTitle,
+.a_p_p_FacebookLogin{
+	z-index:5 !important;
+}
+[class*="a_p_p_DashboardExpander"]{
+	display:none;
+	color:black
+}
+
+video::-webkit-media-controls {
+	display: none;
+  }
+
+  /* Could Use thise as well for Individual Controls */
+//   video::-webkit-media-controls-play-button {}
+
+//   video::-webkit-media-controls-volume-slider {}
+
+//   video::-webkit-media-controls-mute-button {}
+
+//   video::-webkit-media-controls-timeline {}
+
+//   video::-webkit-media-controls-current-time-display {}

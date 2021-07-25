@@ -53,7 +53,8 @@
                             // "backend/polyfills/signaturePad.js",
                             "backend/polyfills/parseXml.js",
                             "src/assets/scripts/pikaday.js",
-                            "src/assets/scripts/vanillaTilt.js"
+                            "src/assets/scripts/vanillaTilt.js",
+                            "src/assets/scripts/tsParticles.min.js"
                         ],
                         "optimization": false,
                         "sourceMap": true,
@@ -239,7 +240,6 @@
                             "port": 4520,
                             "browserTarget": "AngularApp:judima:play"
                         },
-
                         "uploader": {
                             "disableHostCheck": true,
                             // "liveReload": false,

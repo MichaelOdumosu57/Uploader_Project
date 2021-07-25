@@ -174,7 +174,6 @@ class my_ibm_language_client():
         # init tasks
         self.sql_setup()
 
-
     def token_required(self,func):
         print("-------------------")
         print('{}\n'.format('token required'))
@@ -245,8 +244,6 @@ class my_ibm_language_client():
             return func(token,user,my_type)
 
         return inner
-
-
 
     def execute(self, data):
 
@@ -396,8 +393,7 @@ class my_ibm_language_client():
             print("--------------------")
             print('\n{}\n'.format('auth conversion'))
             try:
-                print(access_token)
-                print(username)
+
 
                 @self.token_required
                 def auth_conversion(token,user,my_type):
@@ -439,6 +435,9 @@ class my_ibm_language_client():
                     elif(type == "createContainer"):
                         headers['x-ms-blob-public-access'] = "blob"
 
+
+
+
                     req = myAzureHttpObject(headers['verb'],url=blob_url,headers=headers)
 
                     mySKCP = mySharedKeyCredentialPolicy(
@@ -461,6 +460,90 @@ class my_ibm_language_client():
 
             except BaseException as e:
                 self.error_handler(e,env=env)
+
+        elif(env == "devAuthConversion"):
+            print("--------------------")
+            print('\n{}\n'.format('auth conversion'))
+            try:
+
+
+                # @self.token_required
+                def auth_conversion(token,user,my_type):
+                    storage_account_name = os.environ["AZURE_STORAGE_ACCT_NAME"]
+                    storage_account_key = os.environ["AZURE_STORAGE_ACCT_KEY"]
+                    api_version = '2020-08-04'
+                    request_time = datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
+                    payload = ""
+                    if(type == "updateCORS"):
+
+                        payload = """
+                        <?xml version="1.0" encoding="utf-8"?>
+                        <StorageServiceProperties>
+                        <Cors>
+                                <CorsRule>
+                                    <AllowedOrigins>*</AllowedOrigins>
+                                    <AllowedMethods>POST,GET,OPTIONS</AllowedMethods>
+                                    <MaxAgeInSeconds>0</MaxAgeInSeconds>
+                                    <ExposedHeaders>Content-Length</ExposedHeaders>
+                                    <AllowedHeaders>*</AllowedHeaders>
+                                </CorsRule>
+                            </Cors>
+                        </StorageServiceProperties>
+                        """
+                    headers = {
+                        'verb': method,
+                        'Content-Encoding': '',
+                        'Content-Language': '',
+                        'Content-Length': '',
+                        'Content-MD5': '',
+                        'Content-Type': '',
+                        'Date': '',
+                        'If-Modified-Since': '',
+                        'If-Match': '',
+                        'If-None-Match': '',
+                        'If-Unmodified-Since': '',
+                        'Range': '',
+                        'x-ms-date':request_time,
+                        'x-ms-version':api_version
+                    }
+
+                    blob_url = url
+
+
+                    if(type == "updateCORS"):
+                        headers['Content-Length'] = str(len(payload))
+
+
+
+                    req = myAzureHttpObject(headers['verb'],url=blob_url,headers=headers)
+
+                    mySKCP = mySharedKeyCredentialPolicy(
+                        storage_account_name,
+                        storage_account_key
+                    )
+                    # for debugging look at SharedKeyCredentialPolicy
+                    mySKCP.on_request(req)
+                    #
+
+                    # help make a request to change cors
+                    if(type == "updateCORS"):
+
+                        headersList = dict(req.http_request.headers)
+                        response = requests.request(headers['verb'], blob_url, data=payload, headers=headersList)
+                        pp.pprint(dict(response.headers))
+                        
+
+
+
+                    return {
+                        'status':200,
+                        'message':response.text
+                    }
+                return auth_conversion(access_token,username,"access")
+
+            except BaseException as e:
+                self.error_handler(e,env=env)
+
 
 
         elif(env =="upload"):

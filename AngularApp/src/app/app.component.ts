@@ -10,7 +10,7 @@ import website from './website';
 
 
 declare global {
-    interface Window { Modernizr: any;createMap:any }
+    interface Window { Modernizr: any;createMap:any;tsParticles:any; }
     // globals add your own in dev additions
     // not let or else local to this file
     var gapi: any
@@ -61,16 +61,6 @@ export class AppComponent implements OnInit, OnDestroy {
         ryber.appCO0.metadata.scripts.push(
             ...ryber.appAddScripts({
                 scripts:[
-					{
-						src:"https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.26.3/tsparticles.min.js",
-						name:"tsParticles",
-						integrity:"sha512-f5U3LCj0YmFWHJ+I5vljqpT2RIGQic48+79y0V/fiJ60KX/s/xiZWQ/Zw8elJHpEdTPFa/5rtVil337IJwg4EA==",
-                        crossorigin:"anonymous",
-						defer:"true",
-                        placement:{
-                            appendChild:document.body
-                        }
-					},
 					{
 						src:"https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0&appId=749733915701523&autoLogAppEvents=1",
 						name:"FB.js SDK",

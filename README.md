@@ -91,6 +91,20 @@ refer to README.md in ignore
 [Cant connect to some ports on vm](https://www.virtualbox.org/ticket/20419#comment:4)
 
 * Try to find a solution for a sql backend
+
+* decides to work when it wants to throughing the script in assets as a solution
+```ts
+    {
+        src:"https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.26.3/tsparticles.min.js",
+        name:"tsParticles",
+        integrity:"sha512-f5U3LCj0YmFWHJ+I5vljqpT2RIGQic48+79y0V/fiJ60KX/s/xiZWQ/Zw8elJHpEdTPFa/5rtVil337IJwg4EA==",
+        crossorigin:"anonymous",
+        // defer:"true",
+        placement:{
+            appendChild:document.body
+        }
+    },
+```
 # TODO
 * support for a firebase build option
 

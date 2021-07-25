@@ -57,114 +57,114 @@ export class ParticlesJSDirective {
 
                     //  work goes here
                 Object.entries(group)
-                    .forEach((x:any,i)=>{
-                        let key = x[0]
-                        let val = x[1]
+                .forEach((x:any,i)=>{
+                    let key = x[0]
+                    let val = x[1]
 
-                        let target = Array.from(val.types['target'] || [])
-                        let stretchTo = Array.from(val.types['stretchTo'] || [])
-
-
-                        target
-                        .forEach((y:any,j)=>{
-
-                            // initalize the canvas with particles
-                            tsParticles.load(
-                                zChildren[y].extras.appParticlesJS.options.id,
-                                zChildren[y].extras.appParticlesJS.options
-                            )
-                            //
+                    let target = Array.from(val.types['target'] || [])
+                    let stretchTo = Array.from(val.types['stretchTo'] || [])
 
 
+                    target
+                    .forEach((y:any,j)=>{
 
-                            let myStretch$ = ryber.appCO0.metadata.particlesjs.current
-                            .pipe(
-
-                                filter((z:any,k)=>{
-
-                                    // if these are undefined dont snap the observable
-                                    return z.top && z.height && z.co
-                                    //
-                                }),
-
-                                distinctUntilChanged((prev:any,curr:any)=>{
-
-                                    return prev.top + prev.height ===
-                                           curr.top + curr.height
-                                }),
-                            )
+                        // initalize the canvas with particles
+                        tsParticles.load(
+                            zChildren[y].extras.appParticlesJS.options.id,
+                            zChildren[y].extras.appParticlesJS.options
+                        )
+                        //
 
 
 
-                            let myStretch = myStretch$
-                            .subscribe({
-                                next:(result:any)=>{
-                                    // console.log(result)
-                                    if( result.parsed === "false"){
-                                        result.top = numberParse(result.top)
-                                        result.height = numberParse(result.height)
-                                        delete result.parsed
-                                    }
-                                    // console.log(myStretch$,myStretch)
-                                    let myTop = result.top
-                                    let myHeight = result.height
-                                    // console.log(myTop + myHeight,result.co)
-                                    if(myTop + myHeight > 1000 ){
-                                        zChildren[y].css.height = (myTop + myHeight + 100).toString() + "px"
-                                    }
-                                    else{
-                                        zChildren[y].css.height = "1000px"
-                                    }
-                                    ref.detectChanges()
-                                },
-                                error:(err:any)=>{
+                        let myStretch$ = ryber.appCO0.metadata.particlesjs.current
+                        .pipe(
 
+                            filter((z:any,k)=>{
+
+                                // if these are undefined dont snap the observable
+                                return z.top && z.height && z.co
+                                //
+                            }),
+
+                            distinctUntilChanged((prev:any,curr:any)=>{
+
+                                return prev.top + prev.height ===
+                                        curr.top + curr.height
+                            }),
+                        )
+
+
+
+                        let myStretch = myStretch$
+                        .subscribe({
+                            next:(result:any)=>{
+                                // console.log(result)
+                                if( result.parsed === "false"){
+                                    result.top = numberParse(result.top)
+                                    result.height = numberParse(result.height)
+                                    delete result.parsed
                                 }
-                            })
-                            val.subscriptions.push(myStretch)
-                            //
-
-                        })
-
-
-                        stretchTo
-                        .forEach((y:any,j)=>{
-
-                            let stretchTo = zChildren[y]
-                            let myOptions = stretchTo.extras.appParticlesJS.options
-                            let {mediaQuery} = ryber.appCO0.metadata.ryber.sectionDefault.app.width
-                            ryber.appCO0.metadata.particlesjs.current
-                            .next({
-                                top:   (myOptions ?.[mediaQuery]?.topValue    ? myOptions ?.[mediaQuery]?.topValue.toString()+"px" : undefined) ||   zChildren[y].css.top   ,
-                                height:(myOptions?.[mediaQuery] ?.heightValue ? myOptions?.[mediaQuery] ?.heightValue.toString()+"px" : undefined) || zChildren[y].css.height  ,
-                                parsed:"false",
-                                co
-                            })
-
-                            let resizeEvent = fromEvent(window,"resize")
-
-                            .subscribe({
-                                next:(result:any)=>{
-                                    // console.log(co)
-                                    let {mediaQuery} = ryber.appCO0.metadata.ryber.sectionDefault.app.width
-                                    ryber.appCO0.metadata.particlesjs.current
-                                    .next({
-                                        top:   myOptions ?.[mediaQuery]?.topValue ||     numberParse(zChildren[y].css.top   ),
-                                        height:myOptions?.[mediaQuery] ?.heightValue || numberParse(zChildren[y].css.height),
-                                        co,
-                                    })
-                                },
-                                error:(err:any)=>{
-
+                                // console.log(myStretch$,myStretch)
+                                let myTop = result.top
+                                let myHeight = result.height
+                                // console.log(myTop + myHeight,result.co)
+                                if(myTop + myHeight > 1000 ){
+                                    zChildren[y].css.height = (myTop + myHeight + 100).toString() + "px"
                                 }
-                            })
-                            val.subscriptions.push(resizeEvent)
+                                else{
+                                    zChildren[y].css.height = "1000px"
+                                }
+                                ref.detectChanges()
+                            },
+                            error:(err:any)=>{
+
+                            }
                         })
-
-                        subscriptions.push(...val.subscriptions)
-
+                        val.subscriptions.push(myStretch)
+                        //
 
                     })
+
+
+                    stretchTo
+                    .forEach((y:any,j)=>{
+
+                        let stretchTo = zChildren[y]
+                        let myOptions = stretchTo.extras.appParticlesJS.options
+                        let {mediaQuery} = ryber.appCO0.metadata.ryber.sectionDefault.app.width
+                        ryber.appCO0.metadata.particlesjs.current
+                        .next({
+                            top:   (myOptions ?.[mediaQuery]?.topValue    ? myOptions ?.[mediaQuery]?.topValue.toString()+"px" : undefined) ||   zChildren[y].css.top   ,
+                            height:(myOptions?.[mediaQuery] ?.heightValue ? myOptions?.[mediaQuery] ?.heightValue.toString()+"px" : undefined) || zChildren[y].css.height  ,
+                            parsed:"false",
+                            co
+                        })
+
+                        let resizeEvent = fromEvent(window,"resize")
+
+                        .subscribe({
+                            next:(result:any)=>{
+                                // console.log(co)
+                                let {mediaQuery} = ryber.appCO0.metadata.ryber.sectionDefault.app.width
+                                ryber.appCO0.metadata.particlesjs.current
+                                .next({
+                                    top:   myOptions ?.[mediaQuery]?.topValue ||     numberParse(zChildren[y].css.top   ),
+                                    height:myOptions?.[mediaQuery] ?.heightValue || numberParse(zChildren[y].css.height),
+                                    co,
+                                })
+                            },
+                            error:(err:any)=>{
+
+                            }
+                        })
+                        val.subscriptions.push(resizeEvent)
+                    })
+
+                    subscriptions.push(...val.subscriptions)
+
+
+                })
                     //
                 }
             })

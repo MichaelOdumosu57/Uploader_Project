@@ -2,7 +2,7 @@ import { Directive, ElementRef, HostListener, Input, Renderer2, TemplateRef, Vie
 import { RyberService } from '../ryber.service'
 import { fromEvent, from, Subscription, Subscriber, of, combineLatest } from 'rxjs';
 import { deltaNode, eventDispatcher, numberParse, objectCopy, navigationType,authAE,base64ToBlob,judimaDirective } from '../customExports'
-import { catchError, delay, first, take,retry,tap } from 'rxjs/operators'
+import { catchError, delay, first, take,retry,tap,timeout } from 'rxjs/operators'
 import { environment as env } from '../../environments/environment'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import {photo as fakePhoto} from 'photo'
@@ -238,7 +238,8 @@ export class PictureUploadDirective {
                                                     }
                                                 )
                                                 .pipe(
-                                                    first()
+                                                    first(),
+                                                    timeout(10000)
                                                 )
                                                 .subscribe({
                                                     next:(result:any)=>{

@@ -106,19 +106,21 @@ export class FacebookLoginDirective {
                                         first(), // unsub from inner
                                         concatMap((result)=>{
                                             console.log(result)
-                                        return from(new Promise((res,rej)=>{
-                                            FB.api('/me',(response)=>{
-                                                if(response?.error?.type === "OAuthException" ){
-                                                    rej(response)
-                                                }
-                                                res(response)
+                                            return from(new Promise((res,rej)=>{
+                                                FB.api('/me',(response)=>{
+                                                    if(response?.error?.type === "OAuthException" ){
+                                                        rej(response)
+                                                    }
+                                                    res(response)
+                                                })
                                             })
-                                        }))
+                                        )
                                         .pipe(
                                             first(), // unsub from inner
                                             concatMap((result2:any)=>{
-                                            return backendLogin({result2})
-                                        }))
+                                                return backendLogin({result2})
+                                            })
+                                        )
                                     }))
 
 

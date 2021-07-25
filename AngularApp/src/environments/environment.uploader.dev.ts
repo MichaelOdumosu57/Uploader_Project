@@ -59,10 +59,8 @@ export const environment:any = {
 	// dev additions
 	backend:{
 		url:"http://localhost:3005",
-        // storageURL:"http://127.0.0.1:10000/devstoreaccount1/",
-        storageURL:"https://storageacctdemo624.blob.core.windows.net/",
-        storageContainerURL:"https://storageacctdemo624.blob.core.windows.net/azure"
-
+        storageURL:"https://uploader-azurite-212.herokuapp.com/",
+        storageContainerURL:"https://uploader-azurite-212.herokuapp.com/azure"
 
 	}
 	//

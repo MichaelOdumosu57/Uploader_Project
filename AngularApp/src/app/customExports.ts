@@ -1966,6 +1966,10 @@ export function sCG(devObj?):string{
 
 
 //  utility fn
+
+export function randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toDateString();
+}
 export function componentConsole(devObj?){
 	let {target,data} = devObj
 

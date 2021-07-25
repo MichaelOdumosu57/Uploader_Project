@@ -53,7 +53,7 @@ def createHandler(client):
 
         def set_default_headers(self):
             # self.set_header("Access-Control-Allow-Origin", "*")
-            self.set_header("Access-Control-Allow-Origin", "https://bd8c4f1bf254.ngrok.io")
+            self.set_header("Access-Control-Allow-Origin", "https://3c4de4cc1da6.ngrok.io")
             # self.set_header("Access-Control-Allow-Origin", "http://localhost:4521")
             self.set_header("Access-Control-Allow-Headers", "*")
             self.set_header("Access-Control-Allow-Credentials","true")

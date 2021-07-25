@@ -89,9 +89,11 @@ refer to README.md in ignore
 [difficult connecting when azureite is in VM](https://docs.microsoft.com/en-us/answers/questions/437449/diffculty-connectiong-to-storage-emulator-via-rest.html)
 
 [Cant connect to some ports on vm](https://www.virtualbox.org/ticket/20419#comment:4)
+
+* Try to find a solution for a sql backend
 # TODO
 * support for a firebase build option
-n
+
 
 # Resources
 

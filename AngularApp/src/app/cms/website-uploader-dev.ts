@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { BehaviorSubject, pipe, ReplaySubject } from "rxjs";
 import { environment as env } from "../../environments/environment";
-import {objectCopy,zProtoComponent,zProtoChildren, zChildren, xContain, xPosition,latchUtilities} from '../customExports'
+import {objectCopy,zProtoComponent,zProtoChildren, zChildren, xContain, xPosition,latchUtilities,randomDate} from '../customExports'
 
 
 let website:any = {}
@@ -1273,13 +1273,28 @@ let dashboardDev:Array<Partial<zProtoComponent>> = [
                             type:['main']
                         },
                         options:{
-                            // value:Array(9).fill(null)
+                            // value:Array(7).fill(null)
                             // .map((x:any,i)=>{
+                            //     let rand_merch = Math.floor(Math.random()*4)
+                            //     let merchants = {
+                            //         name :["GNC","City Acres","Bed Bath",""][rand_merch],
+                            //         address:["53 Stubb St","123 Main St","","4521 Penn St"][rand_merch],
+                            //         phone:["","212 241-7823","(718) 456-3290","(305) 456-7890"][rand_merch],
+                            //         photo:["bed_bath.jpg","city_acres.jpg","gnc.jpg",""][rand_merch]
+                            //     }
+                            //     let type = ["Scan","Picture"][Math.floor(Math.random()*2)]
+
                             //     return {
-                            //         Group:"Group "+i,
-                            //         Type:["Scan","Picture"][Math.floor(Math.random()*2)],
-                            //         Total:Math.floor(Math.random()*120),
-                            //         Date:new Date().toDateString()
+                            //         Group:["Work","Personal","Freinds"][Math.floor(Math.random()*3)],
+                            //         Type:type,
+                            //         Total:(Math.random()*120).toFixed(2),
+                            //         Date:randomDate(new Date(2012, 0, 1), new Date()),
+                            //         Comments:["Follow Up Later","Soccer Meal for Kids Soccer Team",""][Math.floor(Math.random()*3)],
+                            //         "Photo":type === "Picture" ?  mediaPrefix({media:['pexels-lukas-296302.jpg',
+                            //     "pexels-mentatdgt-1049622.jpg"][i%2]}) : mediaPrefix({media:merchants.photo}) ,
+                            //         "Merchant Name":   type === "Picture" ? "": merchants.name,
+                            //         "Merchant Address":type === "Picture" ? "": merchants.address,
+                            //         "Merchant Phone":  type === "Picture" ? "": merchants.phone,
                             //     }
                             // }),
                             type:"primeng-table",

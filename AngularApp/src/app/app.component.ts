@@ -30,17 +30,6 @@ declare global {
     var myPhoto
     //
 
-    // globals for webRTC Lab
-    var localConnection :any
-    var remoteConnection :any
-    var room:any
-    var io:any
-    var stream:any
-    var adapter:any
-    var buf:any
-    //
-    //
-
 }
 
 @Component({

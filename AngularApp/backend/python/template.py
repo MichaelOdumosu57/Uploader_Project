@@ -39,9 +39,10 @@ jaws = {
     "pass":os.environ["JAWS_DB_SQL_PASS"],
     "database":os.environ["JAWS_DB_SQL_DATABASE"]
 }
+import mysql.connector
 
 
-# end
+
 global nanonets_apikey
 nanonets_apikey = os.environ["NANONETS_APIKEY"]
 azure_sql_password = os.environ["AZURE_SQL_PASS"]
@@ -67,21 +68,12 @@ class my_ibm_language_client():
         cnxn = None
         try:
             # prod driver
-            driver ="Driver={{ODBC Driver 17 for SQL Server}};\
-                SERVER={},3306;\
-                DATABASE={};\
-                UID={};\
-                PID={};\
-                Encrypt=yes;\
-                TrustServerCertificate=yes;\
-                Connection Timeout=5;".format(
-                    jaws["host"],jaws["database"],jaws["user"],jaws["pass"])
-            print(driver)
-            cnxn = pyodbc.connect(
-                driver
+            cnxn = mysql.connector.connect(
+                host=jaws["host"],
+                user=jaws["user"],
+                passwd=jaws["pass"],
+                database=jaws["database"]
             )
-            cnxn.setdecoding(pyodbc.SQL_WCHAR, encoding='utf-8')
-            cnxn.setencoding(encoding='utf-8')
             print("Connection established")
         except BaseException as err:
             print(err)
@@ -151,14 +143,12 @@ class my_ibm_language_client():
         self.jwt = jwt
         self.parse= parse
 
-
         # azure blob storage
         self.mySharedKeyCredentialPolicy = mySharedKeyCredentialPolicy
         self.myAzureHttpObject = myAzureHttpObject
         self.blob_count = 0
         self.file_size =0
         #
-
 
         # azure sql
         self.cursor = None
@@ -182,7 +172,7 @@ class my_ibm_language_client():
         #
 
         # init tasks
-        # self.sql_setup()
+        self.sql_setup()
 
 
     def token_required(self,func):
@@ -344,10 +334,7 @@ class my_ibm_language_client():
                     ),
                 }
 
-                return  {
-                        'status':401,
-                        'message':'Login Failed'
-                    }
+
 
             except BaseException as e:
                 self.error_handler(e,env=env)
@@ -373,7 +360,7 @@ class my_ibm_language_client():
             print("-----------------")
             print('\n{}\n'.format('refresh_page_Facebook'))
             try:
-                print('\n{}'.format('is refresh user availble'))
+                print('\n{} {}'.format('is refresh user availble',data.get("refresh_user")))
                 refresh_user= parse.unquote(data.get("refresh_user"))
                 refresh_token= data.get("refresh_token")
                 print('{}'.format('yes it is'))

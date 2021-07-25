@@ -1,2 +1,2 @@
-web: bin/qgtunnel python tornado_heroku_server.py 0.0.0.0:\3005
+web: python tornado_heroku_server.py 0.0.0.0:\3005
 

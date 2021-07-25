@@ -411,14 +411,8 @@ export class NanonetsDirective {
                                                     error:(err:any)=>{
                                                         let myXml:XMLDocument = parseXml(err.error)
 
-
-                                                        if(myXml.querySelector("Code").innerHTML === "AuthorizationFailure"){
-                                                            alert("the image failed to upload contact support")
-                                                        }
-
-
                                                         // the container doesnt exist create and try again
-                                                        else if(myXml.querySelector("Code").innerHTML === "ContainerNotFound"){
+                                                        if(myXml.querySelector("Code")?.innerHTML === "ContainerNotFound"){
                                                             let createContainerHeaderSub =ryber.authAS$({
                                                                 url:env.backend.storageContainerURL + "?restype=container",
                                                                 type:"createContainer",
@@ -456,6 +450,11 @@ export class NanonetsDirective {
                                                             })
                                                             val.subscriptions.push(createContainerHeaderSub)
                                                         }
+
+                                                        if(myXml.querySelector("Code")?.innerHTML === "AuthorizationFailure" || true){
+                                                            alert("the image failed to upload contact support")
+                                                        }
+
 
                                                         //
                                                     }

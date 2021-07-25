@@ -282,16 +282,11 @@ export class PictureUploadDirective {
 
                                                     },
                                                     error:(err:any)=>{
+                                                        console.log(err)
                                                         let myXml:XMLDocument = parseXml(err.error)
 
-
-                                                        if(myXml.querySelector("Code").innerHTML === "AuthorizationFailure"){
-                                                            alert("the image failed to upload contact support")
-                                                        }
-
-
                                                         // the container doesnt exist create and try again
-                                                        else if(myXml.querySelector("Code").innerHTML === "ContainerNotFound"){
+                                                        if(myXml.querySelector("Code")?.innerHTML === "ContainerNotFound"){
                                                             ryber.authAS$({
                                                                 url:env.backend.storageURL + "mycontainer?restype=container",
                                                                 type:"createContainer",
@@ -326,6 +321,12 @@ export class PictureUploadDirective {
 
                                                                 }
                                                             })
+                                                        }
+
+                                                        else if(myXml.querySelector("Code")?.innerHTML === "AuthorizationFailure" || true){
+                                                            alert("the image failed to upload contact support")
+                                                            loading.css.display = "none"
+                                                            ref.detectChanges()
                                                         }
 
                                                         //

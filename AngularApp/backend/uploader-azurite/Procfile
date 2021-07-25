@@ -1,2 +1,2 @@
-web: npx azurite-blob --blobHost 0.0.0.0  --blobPort $PORT --location /app --loose  0.0.0.0:\$PORT
+web: npx azurite-blob --blobHost 0.0.0.0  --blobPort $PORT --location /app --loose --debug /app/debug.log  0.0.0.0:\$PORT
 

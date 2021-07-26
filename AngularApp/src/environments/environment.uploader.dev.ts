@@ -66,8 +66,5 @@ export const environment:any = {
 	}
 	//
 
-
-
-
 };
 

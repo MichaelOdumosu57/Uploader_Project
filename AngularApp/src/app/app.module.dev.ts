@@ -1,13 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler,Provider } from '@angular/core';
 import { MyErrorHandler } from './errorHandler'
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {MyInterceptor} from './myInterceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { HammerModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { FormComponent } from './form/form.component';
 import { FormsModule } from '@angular/forms';
 import { environment as env } from '../environments/environment'
+
 
 
 
@@ -39,10 +41,16 @@ import { DashboardDirective } from './directiveDev/dashboard.directive';
 
 
 
-let providers = []
+let providers:Provider[] = [
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: MyInterceptor,
+        multi: true
+    }
+]
 if (env.testingAcct.confirm === "true") {
 
-    providers = [{ provide: ErrorHandler, useClass: MyErrorHandler }]
+    providers.push({ provide: ErrorHandler, useClass: MyErrorHandler })
 }
 
 @NgModule({

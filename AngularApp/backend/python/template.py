@@ -277,6 +277,7 @@ class my_ibm_language_client():
         target = data.get("target")
         type = target = data.get("type")
         access_token = data.get('access_token')
+        query = data.get('query')
         #
         auth_endpoint = data.get("authEndpoint")
         api_name = data.get("apiName")
@@ -703,6 +704,22 @@ class my_ibm_language_client():
             except BaseException as e:
                 self.error_handler(e,env=env)
 
+        elif(env == 'tableQuery'):
+            print('-------------------')
+            print('\n{}\n'.format('tableQuery'))
+            try:
+                cursor.execute(query)
+                cnxn.commit()
+
+                return {
+                    'status':200,
+                    'message':{
+                        'message':'OK'
+                    }
+                }
+
+            except BaseException as e:
+                return self.error_handler(e,env)
 
         return {
             "status" :500,

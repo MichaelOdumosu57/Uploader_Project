@@ -103,7 +103,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
                                 )
                                 .pipe(
                                     first(),
-                                    // retry(2),
+                                    retry(2),
                                     catchError(ryber.unauthenticated)
                                 )
                                 .subscribe({

@@ -243,7 +243,8 @@ export class PictureUploadDirective {
                                             )
                                             .pipe(
                                                 first(),
-                                                timeout(10000)
+                                                timeout(10000),
+                                                // retry(3)
                                             )
                                             //
                                         }),
@@ -303,6 +304,7 @@ export class PictureUploadDirective {
                                             return of({message:"Error"})
                                         }),
                                         concatMap((result:any)=>{
+                                            console.log(result)
                                             // the request did not suceeded
                                             if(result?.message === "Error"){
                                                 return of(result)
@@ -329,7 +331,7 @@ export class PictureUploadDirective {
                                                 )
                                                 .pipe(
                                                     tap(()=>{
-                                                        alert("Information Uploaded Sucessfully")
+
                                                         loading.css.display = "none"
                                                         ref.detectChanges()
                                                     }),

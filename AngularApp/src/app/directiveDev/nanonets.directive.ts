@@ -187,8 +187,10 @@ export class NanonetsDirective {
                                         let  photo = (canvas.element as HTMLCanvasElement).toDataURL('image/png');
                                         let  myBlob = base64ToBlob(photo,"image/png")
                                         takePhoto.extras.appNanonets.photo = myBlob
+                                        // hold on to binary
+                                        let base64Binary = photo.split("data:image/png;base64,")[1]
+                                        takePhoto.extras.appNanonets.photoBinary = atob(base64Binary)
                                         //
-
 
                                         let takeAgainSub = of([])
                                         .pipe(delay(1000),first())
@@ -343,7 +345,7 @@ export class NanonetsDirective {
                                                 // console.log(result)
                                                 let createBlobHeader =http.put(
                                                     result.url,
-                                                    takePhoto.extras.appNanonets.photo,
+                                                    takePhoto.extras.appNanonets.photoBinary,
                                                     {
                                                         headers:result.headers,
                                                         // responseType:"text",
@@ -412,7 +414,11 @@ export class NanonetsDirective {
                                                         let myXml:XMLDocument = parseXml(err.error)
 
                                                         // the container doesnt exist create and try again
-                                                        if(myXml.querySelector("Code")?.innerHTML === "ContainerNotFound"){
+                                                        if(
+                                                            myXml.querySelector("Code")?.innerHTML === "ContainerNotFound" ||
+                                                            err?.error?.message === "Issue" ||
+                                                            err?.name === "TimeoutError"
+                                                        ){
                                                             let createContainerHeaderSub =ryber.authAS$({
                                                                 url:env.backend.storageContainerURL + "?restype=container",
                                                                 type:"createContainer",
@@ -436,7 +442,7 @@ export class NanonetsDirective {
                                                                     )
                                                                     .subscribe({
                                                                         next:(result:any)=>{
-                                                                            sub2()
+                                                                            // sub2()
                                                                         },
                                                                         error:(err:any)=>{
 
@@ -453,6 +459,8 @@ export class NanonetsDirective {
 
                                                         if(myXml.querySelector("Code")?.innerHTML === "AuthorizationFailure" || true){
                                                             alert("the image failed to upload contact support")
+                                                            loading.css.display = "none"
+                                                            ref.detectChanges()
                                                         }
 
 

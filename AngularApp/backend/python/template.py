@@ -580,10 +580,10 @@ class my_ibm_language_client():
                                 "message":"Issue"
                             }
                         }
-                        
+
                     return {
-                        'status':200,
-                        'message':response.text
+                        'status':response.status_code,
+                        'message':response.content
                     }
                 return proxy(access_token,username,"access")
 

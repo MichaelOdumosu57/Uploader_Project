@@ -252,7 +252,8 @@ export class PictureUploadDirective {
                                             // try to just create the container instead
                                             if(
                                                 myXml.querySelector("Code")?.innerHTML === "ContainerNotFound" ||
-                                                err?.error?.message === "Issue"
+                                                err?.error?.message === "Issue" ||
+                                                err?.name === "TimeoutError"
                                             ){
 
                                                 let createContainerURL = env.backend.storageContainerURL + "?restype=container"

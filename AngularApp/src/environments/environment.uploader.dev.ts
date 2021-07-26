@@ -58,7 +58,8 @@ export const environment:any = {
 
 	// dev additions
 	backend:{
-		url:"http://localhost:3005",
+		// url:"http://localhost:3005",
+        url:"https://uploader-app212.herokuapp.com/",
         storageURL:"https://uploader-azurite-212.herokuapp.com/devstoreaccount1",
         storageContainerURL:"https://uploader-azurite-212.herokuapp.com/devstoreaccount1/azure"
 

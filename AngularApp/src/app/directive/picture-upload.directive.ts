@@ -175,7 +175,11 @@ export class PictureUploadDirective {
 
                         })
 
-                        confirm
+
+                        // FIXME somehow when we logout and login, confirm and loading get duplicated
+                            // these are involved with nest and latch however this only happens when a user logs out find the issue
+                            // as mitigation we only grab the first part as how the app should fn
+                        confirm.slice(0,1)
                         .map((y:any,j)=>{
                             return [y,takePhoto[j],loading[j]]
                         })
@@ -184,6 +188,7 @@ export class PictureUploadDirective {
                             let confirm = zChildren[y[0]]
                             let takePhoto = zChildren[y[1]]
                             let loading = zChildren[y[2]]
+                            // console.log(y,takePhoto,zChildren)
 
                             // disapprove changes
                             confirm.extras.options.back.click = ()=>{
@@ -356,7 +361,6 @@ export class PictureUploadDirective {
                             }
                             //
                         })
-
 
 
                         subscriptions.push(...val.subscriptions)

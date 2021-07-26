@@ -322,12 +322,12 @@ export class PictureUploadDirective {
                                                                 }
                                                             })
                                                         }
-
                                                         else if(myXml.querySelector("Code")?.innerHTML === "AuthorizationFailure" || true){
                                                             alert("the image failed to upload contact support")
                                                             loading.css.display = "none"
                                                             ref.detectChanges()
                                                         }
+
 
                                                         //
                                                     }

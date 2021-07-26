@@ -2,7 +2,7 @@ import { Directive, ElementRef, HostListener, Input, Renderer2, TemplateRef, Vie
 import { RyberService } from '../ryber.service'
 import { fromEvent, from, Subscription, Subscriber, of, combineLatest } from 'rxjs';
 import { deltaNode, eventDispatcher, numberParse, objectCopy, navigationType,authAE,base64ToBlob,judimaDirective } from '../customExports'
-import { catchError, delay, first, take,retry,tap,timeout, exhaustMap } from 'rxjs/operators'
+import { catchError, delay, first, take,retry,tap,timeout, exhaustMap, concatMap } from 'rxjs/operators'
 import { environment as env } from '../../environments/environment'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import {photo as fakePhoto} from 'photo'
@@ -215,6 +215,7 @@ export class PictureUploadDirective {
 
                                 // upload the photo to azure storage
                                     // upload data to database
+                                    // TODO refactor to observable so exhaustMap can be used
                                 let url
                                 let sub2 = ()=>{
                                     ryber.authAS$({
@@ -280,15 +281,67 @@ export class PictureUploadDirective {
                                                 .subscribe({
                                                     next:(result3:any)=>{
                                                         console.log(result3)
-                                                        // sub2()
+                                                        sub2()
                                                     },
                                                     error:(err:any)=>{
-
+                                                        alert("the image failed to upload contact support")
+                                                        loading.css.display = "none"
+                                                        ref.detectChanges()
                                                     }
                                                 })
                                             }
                                             //
+
+                                            // issues
+                                            else if(myXml.querySelector("Code")?.innerHTML === "AuthorizationFailure" || true){
+                                                alert("the image failed to upload contact support")
+                                                loading.css.display = "none"
+                                                ref.detectChanges()
+                                            }
+                                            //
+
                                             return of({message:"Error"})
+                                        }),
+                                        concatMap((result:any)=>{
+                                            // the request did not suceeded
+                                            if(result?.message === "Error"){
+                                                return of(result)
+                                            }
+                                            //
+
+                                            //
+                                            else{
+                                                myPackage.photo = url
+                                                myPackage.name = ryber.appCO0.metadata.facebookLogin.loginName
+                                                return http.post(
+                                                    env.backend.url,
+                                                    {
+                                                        env:"upload",
+                                                        result:myPackage,
+                                                        access_token:ryber.appCO0.metadata.facebookLogin.accessToken,
+                                                        user:ryber.appCO0.metadata.facebookLogin.loginName
+
+                                                    },
+                                                    {
+                                                        observe:"response",
+                                                        responseType:"text"
+                                                    }
+                                                )
+                                                .pipe(
+                                                    tap(()=>{
+                                                        alert("Information Uploaded Sucessfully")
+                                                        loading.css.display = "none"
+                                                        ref.detectChanges()
+                                                    }),
+                                                    catchError((err:any)=>{
+                                                        alert("the image failed to upload contact support")
+                                                        loading.css.display = "none"
+                                                        ref.detectChanges()
+                                                        return of({message:"Error"})
+                                                    })
+                                                )
+                                            }
+                                            //
                                         }),
                                         tap(console.log)
                                     )

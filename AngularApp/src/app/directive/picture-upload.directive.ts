@@ -2,7 +2,7 @@ import { Directive, ElementRef, HostListener, Input, Renderer2, TemplateRef, Vie
 import { RyberService } from '../ryber.service'
 import { fromEvent, from, Subscription, Subscriber, of, combineLatest } from 'rxjs';
 import { deltaNode, eventDispatcher, numberParse, objectCopy, navigationType,authAE,base64ToBlob,judimaDirective } from '../customExports'
-import { catchError, delay, first, take,retry,tap,timeout } from 'rxjs/operators'
+import { catchError, delay, first, take,retry,tap,timeout, exhaustMap, concatMap } from 'rxjs/operators'
 import { environment as env } from '../../environments/environment'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import {photo as fakePhoto} from 'photo'
@@ -158,6 +158,7 @@ export class PictureUploadDirective {
                                     //     myBlob = base64ToBlob(photo,"image/png")
                                     // }
                                     takePhoto.extras.appPictureUpload.photo = myBlob
+                                    takePhoto.extras.appPictureUpload.photoBinary = atob(photo.split("data:image/png;base64,")[1])
                                     confirm.css.display = "block"
 
                                     //
@@ -214,132 +215,140 @@ export class PictureUploadDirective {
 
                                 // upload the photo to azure storage
                                     // upload data to database
-                                    let sub2 = ()=>{
-                                        ryber.authAS$({
-                                            url:env.backend.storageContainerURL,
-                                            type:"createBlob",
-                                            method:"PUT",
-                                            contentLength:takePhoto.extras.appPictureUpload.photo.size
-                                        })
-                                        .pipe(
-                                            first(),
-                                        )
-                                        .subscribe({
-                                            next:(result:any)=>{
-                                                let url = result.url
-                                                // console.log(result)
-                                                http.put(
-                                                    result.url,
-                                                    takePhoto.extras.appPictureUpload.photo,
+                                    // TODO refactor to observable so exhaustMap can be used
+                                let url
+                                let sub2 = ()=>{
+                                    ryber.authAS$({
+                                        url:env.backend.storageContainerURL,
+                                        type:"createBlob",
+                                        method:"PUT",
+                                        contentLength:takePhoto.extras.appPictureUpload.photo.size
+                                    })
+                                    .pipe(
+                                        first(),
+                                        exhaustMap((result:any)=>{
+                                            url = result.url
+
+                                            // send metadata to backend since the CORS likes that backend
+                                            return http.post(
+                                                env.backend.url,
+                                                {
+                                                    env:"proxy",
+                                                    proxy_url:url,
+                                                    proxy_payload:takePhoto.extras.appPictureUpload.photoBinary,
+                                                    proxy_headers:result.headers,
+                                                    user:ryber.appCO0.metadata.facebookLogin.loginName,
+                                                    access_token:ryber.appCO0.metadata.facebookLogin.accessToken
+                                                }
+                                            )
+                                            .pipe(
+                                                first(),
+                                                timeout(10000)
+                                            )
+                                            //
+                                        }),
+                                        catchError((err)=>{
+                                            console.log(err)
+                                            let myXml:XMLDocument = parseXml(err.error)
+                                            // try to just create the container instead
+                                            if(
+                                                myXml.querySelector("Code")?.innerHTML === "ContainerNotFound" ||
+                                                err?.error?.message === "Issue" ||
+                                                err?.name === "TimeoutError"
+                                            ){
+
+                                                let createContainerURL = env.backend.storageContainerURL + "?restype=container"
+                                                ryber.authAS$({
+                                                    url:createContainerURL,
+                                                    type:"createContainer",
+                                                    method:"PUT"
+                                                })
+                                                .pipe(
+                                                    first(),
+                                                    exhaustMap((result2:any)=>{
+                                                        return http.post(
+                                                            env.backend.url,
+                                                            {
+                                                                env:"proxy",
+                                                                proxy_url:createContainerURL,
+                                                                proxy_headers:result2.headers,
+                                                                user:ryber.appCO0.metadata.facebookLogin.loginName,
+                                                                access_token:ryber.appCO0.metadata.facebookLogin.accessToken
+                                                            }
+                                                        )
+                                                    })
+                                                )
+                                                .subscribe({
+                                                    next:(result3:any)=>{
+                                                        console.log(result3)
+                                                        sub2()
+                                                    },
+                                                    error:(err:any)=>{
+                                                        alert("the image failed to upload contact support")
+                                                        loading.css.display = "none"
+                                                        ref.detectChanges()
+                                                    }
+                                                })
+                                            }
+                                            //
+
+                                            // issues
+                                            else if(myXml.querySelector("Code")?.innerHTML === "AuthorizationFailure" || true){
+                                                alert("the image failed to upload contact support")
+                                                loading.css.display = "none"
+                                                ref.detectChanges()
+                                            }
+                                            //
+
+                                            return of({message:"Error"})
+                                        }),
+                                        concatMap((result:any)=>{
+                                            // the request did not suceeded
+                                            if(result?.message === "Error"){
+                                                return of(result)
+                                            }
+                                            //
+
+                                            //
+                                            else{
+                                                myPackage.photo = url
+                                                myPackage.name = ryber.appCO0.metadata.facebookLogin.loginName
+                                                return http.post(
+                                                    env.backend.url,
                                                     {
-                                                        headers:result.headers,
-                                                        // responseType:"text",
-                                                        observe:"response"
+                                                        env:"upload",
+                                                        result:myPackage,
+                                                        access_token:ryber.appCO0.metadata.facebookLogin.accessToken,
+                                                        user:ryber.appCO0.metadata.facebookLogin.loginName
+
+                                                    },
+                                                    {
+                                                        observe:"response",
+                                                        responseType:"text"
                                                     }
                                                 )
                                                 .pipe(
-                                                    first(),
-                                                    timeout(10000)
+                                                    tap(()=>{
+                                                        alert("Information Uploaded Sucessfully")
+                                                        loading.css.display = "none"
+                                                        ref.detectChanges()
+                                                    }),
+                                                    catchError((err:any)=>{
+                                                        alert("the image failed to upload contact support")
+                                                        loading.css.display = "none"
+                                                        ref.detectChanges()
+                                                        return of({message:"Error"})
+                                                    })
                                                 )
-                                                .subscribe({
-                                                    next:(result:any)=>{
-                                                        // you get empty response body
-                                                            // replace actual photo blob with url
-                                                            // upload data to amazon sql database
-                                                        myPackage.photo = url
-                                                        myPackage.name = ryber.appCO0.metadata.facebookLogin.loginName
-                                                        http.post(
-                                                            env.backend.url,
-                                                            {
-                                                                env:"upload",
-                                                                result:myPackage,
-                                                                access_token:ryber.appCO0.metadata.facebookLogin.accessToken,
-                                                                user:ryber.appCO0.metadata.facebookLogin.loginName
-
-                                                            },
-                                                            {
-                                                                observe:"response",
-                                                                responseType:"text"
-                                                            }
-                                                        )
-                                                        .pipe(
-                                                            tap(()=>{
-                                                                loading.css.display = "none"
-                                                                ref.detectChanges()
-                                                            })
-                                                        )
-                                                        .subscribe({
-                                                            next:(result:any)=>{
-                                                                alert("Information Uploaded Sucessfully")
-                                                                console.log(result)
-                                                            },
-                                                            error:(err:any)=>{
-                                                                console.log(err)
-                                                            }
-                                                        })
-                                                        //
-                                                        //
-
-                                                    },
-                                                    error:(err:any)=>{
-                                                        console.log(err)
-                                                        let myXml:XMLDocument = parseXml(err.error)
-
-                                                        // the container doesnt exist create and try again
-                                                        if(myXml.querySelector("Code")?.innerHTML === "ContainerNotFound"){
-                                                            ryber.authAS$({
-                                                                url:env.backend.storageURL + "mycontainer?restype=container",
-                                                                type:"createContainer",
-                                                                method:"PUT"
-                                                            })
-                                                            .pipe(
-                                                                first()
-                                                            )
-                                                            .subscribe({
-                                                                next:(result:any)=>{
-                                                                    http.put(
-                                                                        env.backend.storageURL + "mycontainer?restype=container",
-                                                                        "",
-                                                                        {
-                                                                            params:{
-
-                                                                            },
-                                                                            headers:result.headers,
-                                                                            responseType:"text"
-                                                                        }
-                                                                    )
-                                                                    .subscribe({
-                                                                        next:(result:any)=>{
-                                                                            sub2()
-                                                                        },
-                                                                        error:(err:any)=>{
-
-                                                                        }
-                                                                    })
-                                                                },
-                                                                error:(err:any)=>{
-
-                                                                }
-                                                            })
-                                                        }
-
-                                                        else if(myXml.querySelector("Code")?.innerHTML === "AuthorizationFailure" || true){
-                                                            alert("the image failed to upload contact support")
-                                                            loading.css.display = "none"
-                                                            ref.detectChanges()
-                                                        }
-
-                                                        //
-                                                    }
-                                                })
-                                            },
-                                            error:(err:any)=>{
-
                                             }
-                                        })
+                                            //
+                                        }),
+                                        tap(console.log)
+                                    )
+                                    .subscribe()
 
-                                    }
-                                    sub2()
+                                }
+                                sub2()
                                 //
 
                             }

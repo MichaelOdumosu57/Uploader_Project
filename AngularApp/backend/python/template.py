@@ -83,6 +83,7 @@ class my_ibm_language_client():
             None
 
         self.cursor = cnxn.cursor()
+        self.cnxn = cnxn
 
         # create a table if not exists
         try:
@@ -154,6 +155,7 @@ class my_ibm_language_client():
 
         # azure sql
         self.cursor = None
+        self.cnxnx = None
         #
 
         # nanonets application
@@ -259,6 +261,7 @@ class my_ibm_language_client():
         lorem = self.lorem
         requests = self.requests
         cursor = self.cursor
+        cnxn = self.cnxn
         parse = self.parse
         xmltodict = self.xmltodict
         mySharedKeyCredentialPolicy = self.mySharedKeyCredentialPolicy
@@ -591,7 +594,6 @@ class my_ibm_language_client():
                 self.error_handler(e,env=env)
 
 
-
         elif(env =="upload"):
             print("-----------------")
             print('\n{}\n'.format('upload'))
@@ -612,6 +614,7 @@ class my_ibm_language_client():
                     INSERT INTO Uploader ({})
                     VALUES ({})
                     """.format(fields,entries )
+                    cursor = cnxn.cursor()
                     cursor.execute(query_string)
                     cursor.execute("commit")
                     return {

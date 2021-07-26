@@ -55,6 +55,8 @@ if (env.testingAcct.confirm === "true") {
 
 //  no messages
 (console.log as any) = ()=>{}
+(console.warn as any) = ()=>{}
+(console.error as any) = ()=>{}
 //
 @NgModule({
     declarations: [

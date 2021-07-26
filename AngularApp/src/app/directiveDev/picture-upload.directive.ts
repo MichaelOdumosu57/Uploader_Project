@@ -336,7 +336,7 @@ export class PictureUploadDirective {
                                                 )
                                                 .pipe(
                                                     tap(()=>{
-
+                                                        alert("Image Uploaded Sucessfully")
                                                         loading.css.display = "none"
                                                         ref.detectChanges()
                                                     }),

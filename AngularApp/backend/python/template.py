@@ -21,6 +21,7 @@ import jwt
 import requests
 from datetime import datetime,timedelta
 
+import xmltodict
 import pyodbc
 import base64
 import hashlib
@@ -142,6 +143,7 @@ class my_ibm_language_client():
         self.lorem  = lorem
         self.jwt = jwt
         self.parse= parse
+        self.xmltodict = xmltodict
 
         # azure blob storage
         self.mySharedKeyCredentialPolicy = mySharedKeyCredentialPolicy
@@ -179,8 +181,8 @@ class my_ibm_language_client():
         print('{}\n'.format('token required'))
         def inner(token,user,my_type="access"):
 
-            print(self)
-            pp.pprint(self.facebook_login)
+            # print(self)
+            # pp.pprint(self.facebook_login)
             if not token :
                 print('\n{}\n'.format('token missing'))
                 return {
@@ -216,9 +218,9 @@ class my_ibm_language_client():
                 }
             try:
                 mySecret = target_dict.get(secret_type)
-                print("\n{}\n".format(target_dict))
+                # print("\n{}\n".format(target_dict))
                 payload = jwt.decode(token, key=mySecret, algorithms=["HS256"])
-                print(payload)
+                # print(payload)
                 print("Authorized")
                 print("------------------")
 
@@ -258,6 +260,7 @@ class my_ibm_language_client():
         requests = self.requests
         cursor = self.cursor
         parse = self.parse
+        xmltodict = self.xmltodict
         mySharedKeyCredentialPolicy = self.mySharedKeyCredentialPolicy
         myAzureHttpObject = self.myAzureHttpObject
 
@@ -276,6 +279,9 @@ class my_ibm_language_client():
         method = data.get("method")
         url = data.get("url")
         contentLength = data.get("contentLength")
+        proxy_headers = data.get('proxy_headers')
+        proxy_url = data.get('proxy_url')
+        proxy_payload = data.get('proxy_payload')
         #
 
 
@@ -482,7 +488,7 @@ class my_ibm_language_client():
                         <Cors>
                                 <CorsRule>
                                     <AllowedOrigins>*</AllowedOrigins>
-                                    <AllowedMethods>POST,GET,OPTIONS</AllowedMethods>
+                                    <AllowedMethods>POST,GET,OPTIONS,PUT</AllowedMethods>
                                     <MaxAgeInSeconds>0</MaxAgeInSeconds>
                                     <ExposedHeaders>Content-Length</ExposedHeaders>
                                     <AllowedHeaders>*</AllowedHeaders>
@@ -531,7 +537,7 @@ class my_ibm_language_client():
                         headersList = dict(req.http_request.headers)
                         response = requests.request(headers['verb'], blob_url, data=payload, headers=headersList)
                         pp.pprint(dict(response.headers))
-                        
+
 
 
 
@@ -540,6 +546,46 @@ class my_ibm_language_client():
                         'message':response.text
                     }
                 return auth_conversion(access_token,username,"access")
+
+            except BaseException as e:
+                self.error_handler(e,env=env)
+
+        elif(env == "proxy"):
+            print("--------------------")
+            print('\n{}\n'.format('proxy'))
+            try:
+
+                @self.token_required
+                def proxy(token,user,my_type):
+
+                    headersList = dict(proxy_headers)
+                    headersList = {key:val for (key,val) in dict(headersList).items() if val != ""}
+                    print(proxy_headers['verb'])
+                    print(proxy_url)
+                    # print(proxy_payload)
+                    print(headersList)
+
+
+                    response = requests.request(proxy_headers['verb'], proxy_url, data=proxy_payload, headers=headersList,timeout=15)
+                    pp.pprint(dict(response.headers))
+                    print(response.text)
+                    print(response.content)
+                    print(response.status_code)
+
+
+                    if("Application Error" in response.text):
+                        return {
+                            'status':500,
+                            'message':{
+                                "message":"Issue"
+                            }
+                        }
+                        
+                    return {
+                        'status':200,
+                        'message':response.text
+                    }
+                return proxy(access_token,username,"access")
 
             except BaseException as e:
                 self.error_handler(e,env=env)

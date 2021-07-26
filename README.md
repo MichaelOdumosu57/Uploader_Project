@@ -111,6 +111,7 @@ refer to README.md in ignore
 
 # Resources
 
+[mysql connection docs](https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlcursordict.html)
 
 [facebook app client](https://developers.facebook.com/apps/749733915701523/settings/basic/)
 

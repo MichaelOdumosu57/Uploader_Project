@@ -41,6 +41,7 @@ jaws = {
     "database":os.environ["JAWS_DB_SQL_DATABASE"]
 }
 import mysql.connector
+from mysql.connector.errors import InternalError
 
 
 
@@ -82,13 +83,13 @@ class my_ibm_language_client():
         else:
             None
 
-        self.cursor = cnxn.cursor()
+        self.cursor = cnxn.cursor(buffered=True)
         self.cnxn = cnxn
 
         # create a table if not exists
         try:
 
-            self.cursor = self.cursor.execute(
+            self.cursor.execute(
                 """CREATE TABLE  Uploader (
                     my_name             varchar(255),
                     my_group            varchar(255),
@@ -106,7 +107,7 @@ class my_ibm_language_client():
                 )
                 """
             )
-            self.cursor.execute('commit')
+            self.cnxn.commit()
             print("table created")
 
         except BaseException as e:
@@ -593,7 +594,6 @@ class my_ibm_language_client():
             except BaseException as e:
                 self.error_handler(e,env=env)
 
-
         elif(env =="upload"):
             print("-----------------")
             print('\n{}\n'.format('upload'))
@@ -614,9 +614,8 @@ class my_ibm_language_client():
                     INSERT INTO Uploader ({})
                     VALUES ({})
                     """.format(fields,entries )
-                    cursor = cnxn.cursor()
                     cursor.execute(query_string)
-                    cursor.execute("commit")
+                    cnxn.commit()
                     return {
                         'status':200,
                         'message':'OK'
@@ -635,12 +634,13 @@ class my_ibm_language_client():
                 def dashboard(token,user,my_type):
                     if(type =="getAll"):
                         # you must still protect agaiinst sql injection
+                        cursor =cnxn.cursor(dictionary=True)
                         query_string = "SELECT * FROM Uploader WHERE my_group IS NOT NULL AND my_name = '{}';".format(user)
+                        # query_string = "SELECT * FROM Uploader"
+                        cursor.execute(query_string)
+                        query_results = cursor.fetchall()
                         #
-                        rows = [
-                            { row.cursor_description[ind][0]:x for ind,x in enumerate(list(row))}
-                            for row in cursor.execute(query_string).fetchall()
-                        ]
+                        rows = query_results
                         # print(type(rows))
 
                         return {
